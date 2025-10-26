@@ -22,7 +22,8 @@ begin
    writeln('### TODO LIST ###');
    writeln('1. add task');
    writeln('2. view tasks');
-   writeln('3. exit');
+   writeln('3. delete task');
+   writeln('4. exit');
    writeln('choose: ');
 end;
 
@@ -58,6 +59,34 @@ begin
       writeln(i, '. ', tasks[i].description);
 end;
    
+procedure DeleteTask;
+var
+   num, i : integer;
+
+begin
+   if taskCount = 0 then
+      begin
+	 writeln('no tasks to delete');
+	 exit;
+      end;
+
+   ViewTasks;
+   write('enter task number ro delete: ');
+   readln(num);
+
+   if (num < 1) or (num > taskCount) then
+      begin
+	 writeln('invalid  task number');
+	 exit;
+      end;
+
+   for i := num to taskCount - 1 do
+      tasks[i] := tasks[i + 1];
+
+   dec(taskCount);
+   writeln('task deleted');
+end;
+      
 
 begin
    taskCount := 0;
@@ -69,7 +98,8 @@ begin
       case choice of
 	1 : AddTask;
 	2 : ViewTasks;
-	3 : writeln('goodbye!');
+	3 : DeleteTask;
+	4 : writeln('goodbye!');
       else
 	 write('invalid choice')
       end;
