@@ -16,7 +16,7 @@ var
    choice    : integer;
 
 { procedure is a void function } 
-
+{ := is pascal's assignment operator}
 procedure ShowMenu;
 begin
    writeln;
@@ -27,6 +27,30 @@ begin
    writeln('4. delete task');
    writeln('5. exit');
    writeln('choose: ');
+end;
+
+procedure SaveToFile;
+var
+   f		: text; {text is pascal's file type for .txt files}
+   i		: integer;
+   completedVal	: integer;
+begin
+   {assign associates file variable with file name}
+   assign(f, 'tasks.txt');
+   rewrite(f); {open file for writing; creates new or overwrites existing}
+
+   for i := 1 to taskCount do
+      begin
+	 { conver boolean to integer; some systems handle booleans differently}
+	 if tasks[i].completed then
+	    completedVal := 1
+	    else
+	       completedVal := 0;
+	 writeln(f, completedVal);
+	 writeln(f, tasks[i].description);
+      end;
+
+   close(f);
 end;
 
 procedure AddTask;
@@ -42,6 +66,7 @@ begin
    write('enter task: ');
    readln(tasks[taskCount].description);
    tasks[taskCount].completed := false;
+   SaveToFile;
    writeln('task added!');
 end;
 
@@ -90,6 +115,7 @@ begin
       end;
 
    tasks[num].completed := true;
+   SaveToFile;
    writeln('task marked as complete');
 end;   
 
@@ -118,6 +144,7 @@ begin
       tasks[i] := tasks[i + 1];
 
    dec(taskCount);
+   SaveToFile;
    writeln('task deleted');
 end;
       
@@ -129,15 +156,16 @@ begin
       ShowMenu;
       readln(choice);
 
+      { case statement is like switch in C }
       case choice of
 	1 : AddTask;
 	2 : ViewTasks;
 	3 : CompleteTask;
 	4 : DeleteTask;
 	5 : writeln('goodbye!');
-      else
-	 write('invalid choice')
-      end;
+      else {defaultt case}
+	 write('invalid choice');
+      end
    until choice = 5;
 
 end.
