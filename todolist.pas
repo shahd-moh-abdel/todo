@@ -53,6 +53,35 @@ begin
    close(f);
 end;
 
+procedure LoadFromFile;
+var
+   f		: text;
+   completedVal	: integer;
+
+begin
+   assign(f, 'tasks.txt');
+   {$I-} {turn off i/o error checking, so if the file does not exist, the program wont crash}
+   reset(f); {open file for reading}
+   {$I+} {turn it back on }
+
+   { 0 is success, non zero an error}
+   if IOResult <> 0 then
+      exit;
+
+   taskCount := 0;
+   {eof(F) = "end of file", it returns true when we reach the file's end}
+   while not eof(f) do
+      begin
+	 inc(taskCount);
+	 readln(f, completedVal);
+	 {convert integer back to boolean }
+	 tasks[taskCount].completed := (completedVal = 1);
+	 readln(f, tasks[taskCount].description);
+      end;
+
+   close(f);
+end;
+
 procedure AddTask;
 begin
    if taskCount >= 100 then
@@ -151,7 +180,7 @@ end;
 
 begin
    taskCount := 0;
-
+   LoadFromFile;
    repeat
       ShowMenu;
       readln(choice);
