@@ -4,8 +4,9 @@ program TodoList;
 { the colon : means has type of, name : type; }
 type
    Task	= record	  
-	     description :  string;
-	  end;
+	     description : string;
+	     completed	 : boolean;
+	  end;		 
 
 { arrays can start at any index }
 { pascal doesn't require a ; after the last dec in a block}
@@ -22,8 +23,9 @@ begin
    writeln('### TODO LIST ###');
    writeln('1. add task');
    writeln('2. view tasks');
-   writeln('3. delete task');
-   writeln('4. exit');
+   writeln('3. complete task');
+   writeln('4. delete task');
+   writeln('5. exit');
    writeln('choose: ');
 end;
 
@@ -39,6 +41,7 @@ begin
    inc(taskCount);
    write('enter task: ');
    readln(tasks[taskCount].description);
+   tasks[taskCount].completed := false;
    writeln('task added!');
 end;
 
@@ -56,9 +59,40 @@ begin
    writeln;
    writeln('your tasks:');
    for i := 1 to taskCount do
-      writeln(i, '. ', tasks[i].description);
+   begin
+      write(i, '. ');
+      if tasks[i].completed then
+	 write('[X] ')
+      else
+	 write('[ ] ');
+      writeln(tasks[i].description);
+   end;
 end;
-   
+
+procedure CompleteTask;
+var
+   num : integer;
+begin
+   if taskCount = 0 then
+      begin
+	 writeln('No tasks to complete');
+	 exit;
+      end;
+
+   ViewTasks;
+   write('enter task number to mark complete');
+   readln(num);
+
+   if (num < 1) or (num > taskCount) then
+      begin
+	 writeln('invalid task number');
+	 exit;
+      end;
+
+   tasks[num].completed := true;
+   writeln('task marked as complete');
+end;   
+
 procedure DeleteTask;
 var
    num, i : integer;
@@ -98,12 +132,13 @@ begin
       case choice of
 	1 : AddTask;
 	2 : ViewTasks;
-	3 : DeleteTask;
-	4 : writeln('goodbye!');
+	3 : CompleteTask;
+	4 : DeleteTask;
+	5 : writeln('goodbye!');
       else
 	 write('invalid choice')
       end;
-   until choice = 3;
+   until choice = 5;
 
 end.
    
