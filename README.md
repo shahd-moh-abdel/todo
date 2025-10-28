@@ -1,7 +1,7 @@
 # Pascal Todo List
-- a simple command line todo list app, built with **Pascal** to practice the main language core for an upcoming exam.
+> a simple command line todo list app, built with **Pascal** to practice the main language core for an upcoming exam.
 
-this is my first Pascal project, a todo app is perfect for learing the fundamentals, and it is actually useful.
+this is my first Pascal project, a todo app is perfect for learning the fundamentals, and it is actually useful.
 
 ## features
 - add new tasks
